@@ -4,27 +4,27 @@ class Denda:
         self.jumlah = jumlah
         self.alasan = alasan
         self.tanggal = tanggal
-        
-    # ENCAPSULATION: nilai asli disimpan di atribut private __jumlah,
-    # dibaca lewat @property dan diubah lewat setter yang memvalidasi
+
+    # ENCAPSULATION: menyimpan jumlah denda dalam atribut private
     @property
     def jumlah(self):
         return self.__jumlah
 
     @jumlah.setter
     def jumlah(self, nilai):
-        # VALIDASI: denda tidak boleh negatif (aturannya ada di validasiJumlah)
         if not Denda.validasiJumlah(nilai):
             raise ValueError("Jumlah denda tidak boleh negatif")
         self.__jumlah = nilai
 
-    # STATICMETHOD: fungsi pembantu milik class Denda,
-    # tidak memakai self maupun cls (tidak butuh data objek sama sekali)
+    # STATICMETHOD: memvalidasi jumlah denda
     @staticmethod
     def validasiJumlah(jumlah):
         return jumlah >= 0
 
-    # method hitung denda 
+    # Menghitung total denda berdasarkan hari keterlambatan
     def hitungDenda(self, terlambat):
-        self.jumlah = terlambat * 2000 
+        if terlambat < 0:
+            raise ValueError("Jumlah hari keterlambatan tidak boleh negatif")
+
+        self.jumlah = terlambat * 2000
         print("Total denda: Rp", self.jumlah)
