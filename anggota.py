@@ -1,3 +1,6 @@
+from exceptions import InvalidLoanLimitError, ExtensionLimitExceededError
+
+
 class Anggota:
     # Mengubah parameter di class anggota menjadi objek
     def __init__(self, id_anggota, nama, jenis_anggota, batas_pinjam, jumlah_pinjam = 0):
@@ -22,7 +25,7 @@ class Anggota:
     def batas_pinjam(self, nilai):
         # VALIDASI: batas pinjam harus lebih dari 0
         if nilai <= 0:
-            raise ValueError("Batas pinjam harus lebih dari 0")
+            raise InvalidLoanLimitError(nilai)
         self.__batas_pinjam = nilai
 
     # @property → membaca data seperti atribut biasa.
@@ -36,13 +39,17 @@ class Anggota:
     # maks_perpanjangan, durasi_perpanjangan, nama).
 class PerpanjanganMixin:
     def perpanjangPinjaman(self):
-        if self.jumlah_perpanjangan < self.maks_perpanjangan:
-            self.jumlah_perpanjangan += 1
-            print(f"{self.nama} berhasil memperpanjang {self.durasi_perpanjangan} hari "
-                  f"({self.jumlah_perpanjangan}/{self.maks_perpanjangan})")
-            return True
-        print(f"{self.nama} sudah mencapai batas perpanjangan")
-        return False
+        # VALIDASI: anggota tidak boleh memperpanjang lebih dari batas maksimal
+        if self.jumlah_perpanjangan >= self.maks_perpanjangan:
+            raise ExtensionLimitExceededError(
+                self.nama,
+                self.maks_perpanjangan
+            )
+
+        self.jumlah_perpanjangan += 1
+        print(f"{self.nama} berhasil memperpanjang {self.durasi_perpanjangan} hari "
+              f"({self.jumlah_perpanjangan}/{self.maks_perpanjangan})")
+        return True
         
 # Mahasiswa merupakan child class yang mewarisi class Anggota
 class Mahasiswa(PerpanjanganMixin, Anggota):
@@ -97,6 +104,3 @@ class Dosen(PerpanjanganMixin, Anggota):
         # Atribut berikut berasal dari class Mahasiswa
         print("NIDN:", self.nidn)
         print("Jabatan:", self.jabatan)
-        
-   
-
