@@ -1,4 +1,3 @@
-
 class PerpustakaanError(Exception):
     """Base exception untuk sistem perpustakaan."""
 
