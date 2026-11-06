@@ -4,6 +4,10 @@ class Buku:
     jumlah_buku = 0
     
     def __init__(self, id_buku, judul, penulis, tahun_terbit, status="Tersedia"):
+        # VALIDASI: status buku hanya boleh Tersedia atau Dipinjam
+        if status not in ["Tersedia", "Dipinjam"]:
+            raise ValueError("Status buku tidak valid")
+
         self.id_buku = id_buku
         self.judul = judul
         self.penulis = penulis
@@ -20,6 +24,10 @@ class Buku:
 
     # Method untuk mengubah status buku melalui class
     def ubahStatus(self, status):
+        # VALIDASI: status buku hanya boleh Tersedia atau Dipinjam
+        if status not in ["Tersedia", "Dipinjam"]:
+            raise ValueError("Status buku harus Tersedia atau Dipinjam")
+
         self.__status = status
 
     # Method untuk menampilkan seluruh informasi buku
@@ -35,7 +43,7 @@ class Buku:
     def __str__(self):
         return f"[{self.id_buku}] {self.judul} - {self.penulis} ({self.tahun_terbit})"
 
-    # DUNDER METHOD __eq__ = cara objek menentukan apakah mereka sama
+        # DUNDER METHOD __eq__ = cara objek menentukan apakah mereka sama
     # Dua buku dianggap sama kalau id_buku-nya sama
     def __eq__(self, other):
         return isinstance(other, Buku) and self.id_buku == other.id_buku
@@ -90,7 +98,7 @@ class EBook(Buku):
         return self.ukuranFile
 
     # OVERRIDE: menimpa tampilkanInfo() milik Buku dengan versi BukuCetak
-    # (nama method sama, tapi isinya ditambah data khas buku cetak)
+    # (nama method sama, tapi isinya ditambah data khas buku elektronik)
     def tampilkanInfo(self):
         super().tampilkanInfo()   # panggil versi Buku dulu (ID, judul, penulis, dst)
         print("Ukuran File:", self.ukuranFile)
